@@ -23,7 +23,7 @@ class Location:
     name: str
     country: str
     zipcode: int
-    devices: list[device.Device] = []
+    devices: list[device.Thermostat] = []
     users: list[user.User] = []
     timeZoneId: str
     timeZone: str
@@ -51,10 +51,10 @@ class Location:
         self.accessToken = getAccessToken(oauthToken, refreshToken)
 
         for key, value in self._getLocation().items():
-            if inspect.get_annotations(type(self)).get(key) == list[device.Device]:
+            if inspect.get_annotations(type(self)).get(key) == list[device.Thermostat]:
                 for deviceData in value:
                     self.devices.append(
-                        device.Device(
+                        device.Thermostat(
                             oauthToken=self.oauthToken,
                             refreshToken=self.refreshToken,
                             apiKey=self.apiKey,

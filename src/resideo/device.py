@@ -3,7 +3,6 @@ import inspect
 from typing import Literal
 
 import requests
-import rich
 
 import resideo
 
@@ -19,6 +18,26 @@ class Device:
     apiKey: str
     locationId: str
     accessToken: str
+
+    def __init__(
+        self,
+        oauthToken: str,
+        refreshToken: str,
+        apiKey: str,
+        locationId: str,
+        accessToken: str,
+    ):
+        self.oauthToken = oauthToken
+        self.refreshToken = refreshToken
+        self.apiKey = apiKey
+        self.locationId = locationId
+        self.accessToken = accessToken
+
+
+class Thermostat(Device):
+    """
+    Contains data about a thermostat.
+    """
 
     displayedOutdoorHumidity: int
     vacationHold: dict[str, bool]
@@ -74,12 +93,13 @@ class Device:
         accessToken: str,
         **kwargs,
     ):
-        self.oauthToken = oauthToken
-        self.refreshToken = refreshToken
-        self.apiKey = apiKey
-        self.locationId = locationId
-        self.accessToken = accessToken
-
+        super().__init__(
+            oauthToken=oauthToken,
+            refreshToken=refreshToken,
+            apiKey=apiKey,
+            locationId=locationId,
+            accessToken=accessToken,
+        )
         for key, value in kwargs.items():
             if inspect.get_annotations(type(self)).get(key) == datetime.datetime:
                 setattr(
