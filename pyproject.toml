@@ -1,0 +1,27 @@
+[project]
+name = "resideo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Lane324", email = "lanetaylor2013@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.32.3",
+    "rich>=13.9.4",
+]
+
+[project.scripts]
+python-resideo = "python_resideo:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+    "ruff>=0.9.3",
+]
+
