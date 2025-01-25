@@ -1,20 +1,18 @@
+"""Contains data about locations."""
+
 import inspect
 import typing
 
 import requests
-import rich
 
+import resideo
 from resideo import config, device, user
-
-BASE_URL = "https://api.honeywellhome.com/v2"
 
 
 class Location:
-    """
-    Contains data about a location.
-    """
+    """Contains data about a location."""
 
-    baseUrl: str = BASE_URL
+    baseUrl: str = resideo.BASE_URL
     oauthToken: str
     refreshToken: str
     apiKey: str
@@ -70,12 +68,12 @@ class Location:
                 self.configuration = config.Config(**value)
             else:
                 self.__dict__[key] = typing.cast(
-                    inspect.get_annotations(type(self)).get(key), value
+                    inspect.get_annotations(type(self)).get(key),  # type: ignore
+                    value,
                 )
 
     def _getLocation(self):
-        """
-        Makes API call to get data about a location. Limited to account that only have single location.
+        """Makes API call to get data about a location.
 
         Returns:
             API JSON response data
@@ -90,7 +88,7 @@ class Location:
 
 
 def getAccessToken(oauthToken: str, refreshToken: str) -> str:
-    """Gets authentication token"""
+    """Gets authentication token."""
     url = "https://api.honeywellhome.com/oauth2/token"
 
     refreshToken = "zs70SGumUnqZUOwyZPMrS05yVFsgXGBg"

@@ -1,11 +1,17 @@
+"""Contains data about configs."""
+
+
 class Config:
-    """
-    Contains data about a configuration
-    """
+    """Contains data about a configuration."""
 
     faceRecognition: dict[str, bool | int | list[dict[str, list[str, str]] | list[str]]]
 
     def __init__(self, **kwargs):
+        """Initialized a config.
+
+        Args:
+            kwargs: Key words for response data.
+        """
         for key, value in kwargs.items():
             if key not in self.__annotations__:
                 raise AttributeError

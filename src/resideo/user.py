@@ -1,10 +1,10 @@
+"""Contains data about users."""
+
 import inspect
 
 
 class User:
-    """
-    Contains data about a user.
-    """
+    """Contains data about a user."""
 
     userID: int
     username: str
@@ -19,6 +19,11 @@ class User:
     isCurrentUser: bool
 
     def __init__(self, **kwargs):
+        """Initializes a user.
+
+        Args:
+            kwargs: Key word for response data.
+        """
         for key, value in kwargs.items():
             if key not in inspect.get_annotations(type(self)):
                 raise AttributeError

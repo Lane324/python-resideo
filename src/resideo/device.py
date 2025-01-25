@@ -1,3 +1,5 @@
+"""Contains data about devices."""
+
 import datetime
 import inspect
 from typing import Literal
@@ -8,9 +10,7 @@ import resideo
 
 
 class Device:
-    """
-    Contains data about a device.
-    """
+    """Contains data about a device."""
 
     baseUrl: str = resideo.BASE_URL
     oauthToken: str
@@ -27,6 +27,15 @@ class Device:
         locationId: str,
         accessToken: str,
     ):
+        """Initializes a device.
+
+        Args:
+            oauthToken: Token obtained through OAuth.
+            refreshToken: Refresh token required for new access token.
+            apiKey: API key from Resideo app.
+            locationId: Id of the location the thermostat is in.
+            accessToken: Access token.
+        """
         self.oauthToken = oauthToken
         self.refreshToken = refreshToken
         self.apiKey = apiKey
@@ -35,9 +44,7 @@ class Device:
 
 
 class Thermostat(Device):
-    """
-    Contains data about a thermostat.
-    """
+    """Contains data about a thermostat."""
 
     displayedOutdoorHumidity: int
     vacationHold: dict[str, bool]
@@ -93,6 +100,16 @@ class Thermostat(Device):
         accessToken: str,
         **kwargs,
     ):
+        """Initializes thermostat.
+
+        Args:
+            oauthToken: Token obtained through OAuth.
+            refreshToken: Refresh token required for new access token.
+            apiKey: API key from Resideo app.
+            locationId: Id of the location the thermostat is in.
+            accessToken: Access token.
+            kwargs: Key words for response data.
+        """
         super().__init__(
             oauthToken=oauthToken,
             refreshToken=refreshToken,
@@ -102,23 +119,24 @@ class Thermostat(Device):
         )
         for key, value in kwargs.items():
             if inspect.get_annotations(type(self)).get(key) == datetime.datetime:
-                setattr(
-                    self, key, datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                )
+                setattr(self, key, datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
             elif key not in inspect.get_annotations(type(self)):
                 raise AttributeError
             else:
                 setattr(self, key, value)
 
     def setTemp(self, temp: int, mode: Literal["Heat", "Cool"]):
-        """Sets temp."""
+        """Sets temp.
+
+        Args:
+            temp: Temperature to set thermostat to.
+            mode: Mode to set thermostat to.
+        """
         possibleModes = ("Heat", "Cool")
         if mode not in possibleModes:
             raise ValueError(
                 f"Invalide mode of {mode}. Must be {possibleModes[0]} or {possibleModes[1]}."
             )
-        if not self.deviceType == "Thermostat":
-            raise ValueError("Device is not a thermostat.")
 
         headers = {
             "Authorization": f"Bearer {self.accessToken}",
@@ -137,7 +155,7 @@ class Thermostat(Device):
             "locationId": self.locationId,
         }
 
-        response = requests.post(
+        requests.post(
             f"https://api.honeywellhome.com/v2/devices/thermostats/{self.deviceID}",
             params=params,
             headers=headers,

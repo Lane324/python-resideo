@@ -20,7 +20,29 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
+    "pytest-cov>=6.0.0",
     "pytest>=8.3.4",
     "ruff>=0.9.3",
 ]
 
+[tool.ruff]
+# Set the maximum line length to 100.
+line-length = 100
+include = ["pyproject.toml", "src/**/*.py", "tests/**/*.py"]
+
+[tool.ruff.lint]
+extend-select = [
+    "E501", # line-too-long rule
+    "UP",   # pyupgrade
+    "D",    # pydocstyle
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+addopts = "--cov=resideo --cov-branch --cov-report xml tests --cov-report term-missing"
+testpaths = ["tests"]
+
+[tool.ruff.format]
+line-ending = "lf"
